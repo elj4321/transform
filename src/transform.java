@@ -38,77 +38,36 @@ public class transform {
 //    o(location.getFile());
     Scanner scanr = new Scanner(new File(infile));
 
-    int maxTime = 999999;
-    // Read in number of pairs
-    int numPairs = scanr.nextInt();
-    outd("numPairs = " + numPairs);
+    // Read in size of patter
+    int pattSize = scanr.nextInt();
+    outd("pattSize = " + pattSize);
+    char[][] fullPatt1 = new char[pattSize][pattSize];
+    char[][] fullPatt2 = new char[pattSize][pattSize];
 
-
-    int minStart = maxTime;
-    int maxEnd = 0;
-
-    // The on/off array
-    int[] milking = new int[maxTime+1];
-
-    // Loop over all pairs and fill in on/off array
-    for (int iPair = 1; iPair <= numPairs; iPair++)
+    // Read in original and transformed patterns
+    for (int i = 0; i < pattSize; i++)
     {
-      // Read and store start/end for each farmer, 0 to 999,999 seconds
-      // NOTE: each start and end might both be 0
-      // intervals can overlap
-      // start times not necessarily appearing in ascending order
-      int startSecs = scanr.nextInt();
-      int endSecs = scanr.nextInt();
-      outd("start = " + startSecs + " end = " + endSecs);
-      // If start and end the same then no milking
-      if (startSecs >= endSecs) continue;
-      // Populate the on/off array
-      for (int i = startSecs; i < endSecs; i++) milking[i] = 1;
-      if (startSecs < minStart) minStart = startSecs;
-      if (endSecs > maxEnd) maxEnd = endSecs;
+      String aLine = scanr.next();
+      outd(aLine);
+      for (int j = 0; j < aLine.length(); j++)
+      {
+        fullPatt1[i][j] = aLine.charAt(j);
+      }
     }
-    outd("min start = " + minStart + ", max end = " + maxEnd);
-
-//    StringBuilder sb = new StringBuilder();
-
-    int maxMilked = 0;
-    int maxUnMilked = 0;
-    boolean milkingNow = true;
-    int currentRun = 0;
-    // Loop over all times
-    for (int i = minStart; i <= maxEnd; i++)
+    for (int i = 0; i < pattSize; i++)
     {
-//      sb.append("" + milking[i] +",");
-      if (milking[i] == 1)
+      String aLine = scanr.next();
+      outd(aLine);
+      for (int j = 0; j < aLine.length(); j++)
       {
-        // Now milking
-        // If not milking before then update results reset run
-        if (milkingNow == false)
-        {
-          if (currentRun > maxUnMilked) maxUnMilked = currentRun;
-          milkingNow = true;
-          currentRun = 0;
-        }
+        fullPatt2[i][j] = aLine.charAt(j);
       }
-      else
-      {
-        // Not milking
-        // If milking before then update results reset run
-        if (milkingNow == true)
-        {
-          if (currentRun > maxMilked) maxMilked = currentRun;
-          milkingNow = false;
-          currentRun = 0;
-        }
-      }
-      currentRun++;
     }
 
-//    outd(sb.toString());
-
+    int nTransform = 0;
     // Output results
-    outd("" + maxMilked + " " + maxUnMilked);
-    out.println(maxMilked + " " + maxUnMilked);
+    outd("" + nTransform);
+    out.println(nTransform);
     scanr.close();
     out.close();
     System.exit(0);
