@@ -22,7 +22,7 @@ import java.io.PrintStream;
 
 public class transform {
 
-  private static boolean debug = true;
+  private static boolean debug = false;
   private static final String task = "transform";
   private static PrintStream outs = System.out;
 
@@ -56,6 +56,7 @@ public class transform {
     outd("ctrOffset = " + ctrOffset);
 
     // Read in original and transformed patterns
+    // NOTE: first index is Y axis, second is X axis
     for (int i = 0; i < pattSize; i++)
     {
       String aLine = scanr.next();
@@ -138,28 +139,36 @@ public class transform {
   {
     boolean retVal = true;
     int pattSize = patt1[0].length;
+    outd("pattSize,ixcase,iycase : " + pattSize + "," + ixcase + "," + iycase);
     for (int ia = 0; ia < pattSize; ia++)
     {
       for (int ja = 0; ja < pattSize; ja++)
       {
         // switch from array coords to centered coords
         // Note: factor of 2 allows us to use all int
-        int ix = ia*2 - ctrOffset;
-        int iy = ja*2 - ctrOffset;
+        // NOTE: first index is Y axis, second is X axis
+        int iy = ia*2 - ctrOffset;
+        int ix = ja*2 - ctrOffset;
         // apply transformation
-        int ix2 = txfrm(ix, iy, ixcase);
         int iy2 = txfrm(iy, ix, iycase);
+        int ix2 = txfrm(ix, iy, ixcase);
         // switch back to array coords
-        int ia2 = (ix2 + ctrOffset)/2;
-        int ja2 = (iy2 + ctrOffset)/2;
+        int ia2 = (iy2 + ctrOffset)/2;
+        int ja2 = (ix2 + ctrOffset)/2;
         // check if equal, break out if not
+        outd("check ia,ja : ia2,ja2 = "+ ia + "," + ja + " : " + ia2 + "," + ja2);
+        outd("check ix,iy : ix2,iy2 = "+ ix + "," + iy + " : " + ix2 + "," + iy2);
+        outd("patt1[ia][ja] : patt2[ia2][ja2] " + patt1[ia][ja] + ":" + patt1[ia2][ja2]);
         if (patt1[ia][ja] != patt2[ia2][ja2])
         {
+          outd("NO");
           retVal = false;
           break;
         }
+        outd("YES");
       }
     }
+    outd("FINAL TRUE");
     return retVal;
   }
 
